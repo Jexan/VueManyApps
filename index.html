@@ -23,6 +23,12 @@
 		<div>
 			<span>Current Turn: {{turnSymbol}}</span>
 		</div>
+
+		<div v-if="gameFinished">
+			<span>
+				{{winnerSymbol}} won!
+			</span>
+		</div>
 	</main>
 
 	<script type="text/javascript" src="js/app.js"></script>
