@@ -6,12 +6,25 @@
 
 	<title>TicTacVue</title>
 
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
 	<script type="text/javascript" src="js/vue.js"></script>
 </head>
 <body>
+	
 	<main id="ticTacVue">
-		
+		<div v-for="rowN in rowsAndCols" class="gameRow">
+			<div v-for="colN in rowsAndCols" @click="putPieceAt(rowN,colN)" class="gameSquare">
+				<span :class="board[rowN][colN] + 'Square'">{{board[rowN][colN]}}</span>
+			</div>
+		</div>
+
+		<div>
+			<span>Current Turn: {{turnSymbol}}</span>
 		</div>
 	</main>
+
+	<script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>

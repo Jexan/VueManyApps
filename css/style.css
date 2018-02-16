@@ -1,0 +1,26 @@
+.gameSquare {
+    background-color: #eee;
+    width: 100px;
+    height: 100px;
+    border: black 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gameSquare > span {
+    font-size: 20px;
+    font-family: Segoe UI;
+}
+
+.XSquare {
+    color: blue;
+}
+
+.OSquare {
+    color: red;
+}
+
+.gameRow {
+    display: flex;
+}
