@@ -1,12 +1,17 @@
-const TicTacVue = new Vue({
-    el: '#ticTacVue',
+const app_list = {'ttt': 'Tic Tac Toe'};
 
-    data: {
-        board: [[null, null, null], [null, null, null], [null, null, null]],
-        turnSymbol: 'X',
-        rowsAndCols: [0,1,2],
-        winnerSymbol: null,
-        gameFinished: false,
+Vue.component('ttt', {
+    template: '#ttt-template',
+
+    data: function() {
+        return {
+            board: [[null, null, null], [null, null, null], [null, null, null]],
+            turnSymbol: 'X',
+            rowsAndCols: [0,1,2],
+            winnerSymbol: null,
+            gameFinished: false, 
+            turn: 0,
+        }
     },
 
     methods: {
@@ -17,6 +22,12 @@ const TicTacVue = new Vue({
             }
 
             this.board[row][col] = this.turnSymbol;
+            this.turn += 1;
+
+            if(this.turn >= 9) {
+                this.gameFinished = true;
+                this.winnerSymbol = "No one";
+            }
 
             if(this.someoneWon()) {
                 this.gameFinished = true;
@@ -66,8 +77,46 @@ const TicTacVue = new Vue({
             return false;
         },
 
+        resetGame: function() {
+            this.board = [[null, null, null], [null, null, null], [null, null, null]];
+            this.turnSymbol = 'X';
+            this.winnerSymbol = null;
+            this.gameFinished = false;
+            this.turn = 0;    
+        },
+
         changeTurn: function() {
             this.turnSymbol = (this.turnSymbol === 'X')? 'O' : 'X';
         }
+    }
+});
+
+Vue.component('app_list', {
+    template: '#app-list-template',
+    
+    data: function() {
+        return {
+            app_list: app_list
+        }
+    },
+
+    methods: {
+        change_app: function(app) {
+            this.$emit('update:current_view', app);
+        }
+    }
+});
+
+const ManyApps = new Vue({
+    el: '#main-app',
+
+    data: {
+        current_view: 'app_list',
+    },
+
+    methods: {
+        back_to_list: function() {
+            this.current_view = 'app_list';
+        },
     }
 });

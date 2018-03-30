@@ -12,24 +12,49 @@
 	<script type="text/javascript" src="js/vue.js"></script>
 </head>
 <body>
-	
-	<main id="ticTacVue">
-		<div v-for="rowN in rowsAndCols" class="gameRow">
-			<div v-for="colN in rowsAndCols" @click="putPieceAt(rowN,colN)" class="gameSquare">
-				<span :class="board[rowN][colN] + 'Square'">{{board[rowN][colN]}}</span>
+
+	<script type="text/x-template" id="ttt-template">
+		<div id="tic-tac-toe">
+			<div v-for="rowN in rowsAndCols" class="gameRow">
+				<div v-for="colN in rowsAndCols" @click="putPieceAt(rowN,colN)" class="gameSquare">
+					<span :class="board[rowN][colN] + 'Square'">{{board[rowN][colN]}}</span>
+				</div>
 			</div>
-		</div>
 
-		<div>
-			<span>Current Turn: {{turnSymbol}}</span>
-		</div>
+			<div>
+				<span>Current Turn: {{turnSymbol}}</span>
+			</div>
 
-		<div v-if="gameFinished">
-			<span>
-				{{winnerSymbol}} won!
-			</span>
+			<div v-if="gameFinished">
+				<span>
+					{{winnerSymbol}} won!
+				</span>
+			</div>
+			<button @click="resetGame">Reset</button>
 		</div>
-	</main>
+	</script>	
+
+	<script type="text/x-template" id="app-list-template">
+		<div id="app-list">
+			<h2>Available Apps</h2>
+			<ul>
+				<li v-for="(app, codename) in app_list" @click="change_app(codename)">
+					{{app}}
+				</li>
+			</ul>
+		</div>
+	</script>	
+
+	<div id="main-app">		
+		<header>
+			<button v-show="current_view !== 'app_list'" @click="back_to_list()">
+				Back
+				{{current_view}}
+			</button>
+		</header>
+		<component :is="current_view"  @update:current_view="new_value => current_view = new_value" id="main_container">
+		</component>
+	</div>
 
 	<script type="text/javascript" src="js/app.js"></script>
 </body>
