@@ -4,14 +4,55 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>TicTacVue</title>
+	<title>VueManyApps</title>
 
-	<link rel="stylesheet" type="text/css" href="css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="lib/normalize.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 
-	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="lib/vue.js"></script>
+	<script type="text/javascript" src="lib/simpleStorage.js"></script>
 </head>
 <body>
+
+	<script type="text/x-template" id="todo-template">
+		<div>
+			<header id="todo-header">
+				<div>
+					<h1>To-do App</h1><small>Powered by Vue.js</small>
+				</div>
+				<button class="delete-btn delete-all-btn" @click="deleteChecked">
+					Delete all checked
+				</button>
+			</header>
+			<ul id="todos-list">
+				<div v-for="item in todos" class="todo">
+					<div class="todo-container">
+						<div v-show="!item.editing" class="todo-text">
+							<li :class="{'todo-checked': item.done}" >
+								<input type="checkbox" :id="'todo' + item.id" v-model="item.done" @click="saveTodos()"/>
+      							<label :for="'todo' + item.id" class="todo-text">{{item.text}}</label>
+							</li>
+						</div>
+						<div v-show="item.editing">
+							<input type="text" v-model="item.text" @keydown.enter="toggleEdit(item)">
+						</div>
+					</div>
+					<div class="todo-panel">
+						<button class="edit-btn" v-show="!item.editing" @click="toggleEdit(item)">Edit</button>
+						<button class="delete-btn" @click='deleteTodo(item.id)'>Delete</button>
+					</div>
+				</div>
+			</ul>
+
+			<form @submit.prevent="addTodo" id="new-todo-form">
+				<div>
+					<label for="addTodo">Add a Todo</label>
+					<input type="text" v-model="newTodo" id="addTodo">
+				</div>
+				<button type="submit">+</button>	
+			</form>
+		</div>
+	</script>
 
 	<script type="text/x-template" id="ttt-template">
 		<div id="tic-tac-toe">
@@ -38,7 +79,7 @@
 		<div id="app-list">
 			<h2>Available Apps</h2>
 			<ul>
-				<li v-for="(app, codename) in app_list" @click="change_app(codename)">
+				<li v-for="(app, codename) in appList" @click="changeApp(codename)">
 					{{app}}
 				</li>
 			</ul>
@@ -46,13 +87,12 @@
 	</script>	
 
 	<div id="main-app">		
-		<header>
-			<button v-show="current_view !== 'app_list'" @click="back_to_list()">
-				Back
-				{{current_view}}
+		<header id="main-app-header">
+			<button v-show="currentView !== 'appList'" @click="backToList()">
+				Back			
 			</button>
 		</header>
-		<component :is="current_view"  @update:current_view="new_value => current_view = new_value" id="main_container">
+		<component :is="currentView" @update:current-view="new_value => currentView = new_value" id="main-container">
 		</component>
 	</div>
 

@@ -1,4 +1,4 @@
-const app_list = {'ttt': 'Tic Tac Toe'};
+const appList = {'ttt': 'Tic Tac Toe', 'todo': "To-Do"};
 
 Vue.component('ttt', {
     template: '#ttt-template',
@@ -91,32 +91,101 @@ Vue.component('ttt', {
     }
 });
 
-Vue.component('app_list', {
+Vue.component('appList', {
     template: '#app-list-template',
     
     data: function() {
         return {
-            app_list: app_list
+            appList: appList
         }
     },
 
     methods: {
-        change_app: function(app) {
-            this.$emit('update:current_view', app);
+        changeApp: function(app) {
+            this.$emit('update:current-view', app);
         }
     }
+});
+
+Vue.component('todo', {
+    template: "#todo-template",
+
+    data: function() { 
+        const todoId = simpleStorage.get('todoId');
+
+        if (todoId === undefined) {
+            todoId = 0;
+            simpleStorage.set('Jexan@VueManyApps::todoId', 0);
+        }
+
+        return {
+            todos: simpleStorage.get('Jexan@VueManyApps::todos') || [],
+            newTodo: '',
+            todoId: todoId,
+        }
+    },
+
+    mounted: function() {
+        this.$on('saving-pending', () => this.saveTodos());
+    },
+
+    methods: {
+        selectText: function (complete) {
+            return complete ? 'Uncheck' : 'Complete';
+        },
+
+        toggleEdit: function (item) {
+            item.editing = !item.editing;
+
+            if (!item.editing) 
+                this.$emit('saving-pending'); 
+        },
+
+        addTodo: function () {
+            if (this.newTodo === '') return;
+
+            const todo = {
+                text: this.newTodo,
+                done: false,
+                id: this.todoId,
+                editing: false
+            }
+
+            this.todoId += 1;
+            simpleStorage.set('Jexan@VueManyApps::todoId', this.todoId);
+
+            this.todos.push(todo);
+            this.newTodo = '';
+        },
+
+        deleteTodo: function (id) {
+            this.todos = this.todos.filter(todo => todo.id !== id);
+        },
+
+        saveTodos: function () {
+            simpleStorage.set('Jexan@VueManyApps::todos', this.todos);
+        },
+
+        deleteChecked: function () {
+            this.todos = this.todos.filter(todo => !todo.done);
+        }
+    },
+
+    watch: {
+        todos: function() {this.saveTodos()},
+    },
 });
 
 const ManyApps = new Vue({
     el: '#main-app',
 
     data: {
-        current_view: 'app_list',
+        currentView: 'appList',
     },
 
     methods: {
-        back_to_list: function() {
-            this.current_view = 'app_list';
+        backToList: function() {
+            this.currentView = 'appList';
         },
     }
 });

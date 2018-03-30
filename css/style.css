@@ -1,3 +1,7 @@
+li {
+    list-style: none;
+}
+
 .gameSquare {
     background-color: #eee;
     width: 100px;
@@ -10,7 +14,7 @@
 
 .gameSquare > span {
     font-size: 20px;
-    font-family: Segoe UI;
+    font-family: Impact;
 }
 
 .XSquare {
@@ -23,4 +27,77 @@
 
 .gameRow {
     display: flex;
+}
+
+#body {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#main-app {
+    margin: auto;
+    width: 40%;
+}
+
+
+#main-app-header {
+    height: 20px;
+    background-color: #eee;
+}
+
+button {
+    border: 0;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 2px;
+    display: inline;
+    background-color: #76ffdb;
+}
+
+.todo, #new-todo-form, #todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+}
+
+#new-todo-form {
+    background-color:aliceblue;
+    padding: 4px;
+}
+
+#new-todo-form  label{
+    display: block;
+}
+
+#new-todo-form input {
+    border-radius:4px;
+    border: 1px solid #2bcc2b;
+}
+
+.todo-checked {
+    text-decoration-line: line-through;
+    color: #999;
+}
+
+.delete-btn {
+    background-color: red;
+    color: #fff;
+}
+
+.delete-all-btn {
+    padding: 10px;
+}
+
+.todo-panel {
+    margin:auto;
+}
+
+.todo-container {
+    margin: auto;
+    width: 70%;
+}
+
+#todos-list {
+    padding: 5px;
 }

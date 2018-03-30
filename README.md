@@ -2,4 +2,8 @@ An app list made with Vue, to showcase the capacities of the framework. It inclu
 
 **TicTacVue**
 
-A simple Tic Tac Toe made with Vue.js technology.
+A simple Tic Tac Toe game. 
+
+**TO-DO**
+
+A To-Do made with Simple Storage, to assure data persistency. Allows editting and checking of the created To-Dos. 

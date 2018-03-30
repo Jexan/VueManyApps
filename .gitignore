@@ -1,3 +1,2 @@
 # Ignore the library files.
-normalize.css
-vue.js
+lib/*
