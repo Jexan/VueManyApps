@@ -1,32 +1,5 @@
-li {
-    list-style: none;
-}
-
-.gameSquare {
-    background-color: #eee;
-    width: 100px;
-    height: 100px;
-    border: black 1px solid;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.gameSquare > span {
-    font-size: 20px;
-    font-family: Impact;
-}
-
-.XSquare {
-    color: blue;
-}
-
-.OSquare {
-    color: red;
-}
-
-.gameRow {
-    display: flex;
+* {
+    box-sizing: border-box;
 }
 
 #body {
@@ -40,20 +13,84 @@ li {
     width: 40%;
 }
 
-
 #main-app-header {
-    height: 20px;
     background-color: #eee;
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+li {
+    list-style: none;
 }
 
 button {
     border: 0;
     border-radius: 5px;
     margin: 2px;
-    padding: 2px;
-    display: inline;
     background-color: #76ffdb;
 }
+
+.available-app {
+    margin: 0px auto;
+    padding: 20px;
+    border: 1px solid green;
+}
+
+.available-app:hover {
+    background-color: cadetblue;
+    color: white;
+}
+
+/* TIC TAC TOE */
+
+.game-square {
+    background-color: #eee;
+    width: 100px;
+    height: 100px;
+    border: black 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-square:hover {
+    background-color: #fff;
+    border-color: #aaa;
+}
+
+.X-square, .O-square {
+    font-size: 20px;
+    font-family: Impact;
+}
+
+.X-square {
+    color: blue;
+}
+
+.O-square {
+    color: red;
+}
+
+.game-row {
+    display: flex;
+}
+
+#ttt-wrapper {
+    display:flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content:space-around;
+}
+
+#ttt-info-panel {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TO DO */
 
 .todo, #new-todo-form, #todo-header {
     display: flex;
@@ -100,4 +137,27 @@ button {
 
 #todos-list {
     padding: 5px;
+}
+
+/* CALCULATOR */
+
+.calc-button {
+    width: 20%;
+    height: 40px;
+    border: 1px solid #77d4a9;
+    background-color:#e9eaea;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#calc-buttons {
+    display:flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+#calc-bar {
+    width: 100%;
+    height: 2.5em;
 }

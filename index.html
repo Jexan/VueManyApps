@@ -18,7 +18,7 @@
 		<div>
 			<header id="todo-header">
 				<div>
-					<h1>To-do App</h1><small>Powered by Vue.js</small>
+					<h2>To-do App</h2><small>Powered by Vue.js</small>
 				</div>
 				<button class="delete-btn delete-all-btn" @click="deleteChecked">
 					Delete all checked
@@ -55,31 +55,73 @@
 	</script>
 
 	<script type="text/x-template" id="ttt-template">
-		<div id="tic-tac-toe">
-			<div v-for="rowN in rowsAndCols" class="gameRow">
-				<div v-for="colN in rowsAndCols" @click="putPieceAt(rowN,colN)" class="gameSquare">
-					<span :class="board[rowN][colN] + 'Square'">{{board[rowN][colN]}}</span>
+		<div>
+			<h2>Tic Tac Toe</h2>
+			<div id="ttt-wrapper">
+				<div id="ttt-board">
+					<div v-for="rowN in rowsAndCols" class="game-row">
+						<div v-for="colN in rowsAndCols" @click="putPieceAt(rowN,colN)" class="game-square">
+							<span :class="symbolClass(board[rowN][colN])">{{board[rowN][colN]}}</span>
+						</div>
+					</div>
+				</div>
+
+				<div id="ttt-info-panel">
+					<div>
+						<p>Current Turn: <span :class="symbolClass(turnSymbol)">{{turnSymbol}}</span></p>
+					</div>
+
+					<div v-if="gameFinished">
+						<span :class="symbolClass(winnerSymbol)">
+							{{winnerSymbol}} won!
+						</span>
+					</div>
+					<button @click="resetGame">Reset</button>
 				</div>
 			</div>
-
-			<div>
-				<span>Current Turn: {{turnSymbol}}</span>
-			</div>
-
-			<div v-if="gameFinished">
-				<span>
-					{{winnerSymbol}} won!
-				</span>
-			</div>
-			<button @click="resetGame">Reset</button>
 		</div>
 	</script>	
+
+	<script type="text/x-template" id="calculator-template">
+		<div>
+			<h2>Calculator</h2>
+			<div id="result">
+				<input type="text" v-model="currentCalc" @keydown.enter="equalTo" id="calc-bar">
+				<p v-hidden="!errorShow">{{errorMsg}}</p>
+			</div>
+			<div id="calc-buttons">
+				<div class="calc-button" @click="addSymbol($event)">7</div>
+				<div class="calc-button" @click="addSymbol($event)">8</div>
+				<div class="calc-button" @click="addSymbol($event)">9</div>
+				<div class="calc-button" @click="equalTo">=</div>
+				<div class="calc-button" @click="deleteLast"><-</div>
+
+				<div class="calc-button" @click="addSymbol($event)">4</div>
+				<div class="calc-button" @click="addSymbol($event)">5</div>
+				<div class="calc-button" @click="addSymbol($event)">6</div>
+				<div class="calc-button" @click="addSymbol($event)">+</div>
+				<div class="calc-button" @click="clearEverything">CE</div>
+
+				<div class="calc-button" @click="addSymbol($event)">1</div>
+				<div class="calc-button" @click="addSymbol($event)">2</div>
+				<div class="calc-button" @click="addSymbol($event)">3</div>
+				<div class="calc-button" @click="addSymbol($event)">-</div>
+				<div class="calc-button" @click="addSymbol($event)">^</div>
+
+				<div class="calc-button" @click="addSymbol($event)">.</div>
+				<div class="calc-button" @click="addSymbol($event)">0</div>
+				<div class="calc-button" @click="addSymbol($event)">/</div>
+				<div class="calc-button" @click="addSymbol($event)">*</div>
+				<div class="calc-button" @click="addParentheses">{{currentParentheses}}</div>
+			</div>
+		</div>
+	</script>
 
 	<script type="text/x-template" id="app-list-template">
 		<div id="app-list">
 			<h2>Available Apps</h2>
 			<ul>
-				<li v-for="(app, codename) in appList" @click="changeApp(codename)">
+				<li v-for="(app, codename) in appList" @click="changeApp(codename)" class="available-app">
 					{{app}}
 				</li>
 			</ul>
@@ -88,7 +130,7 @@
 
 	<div id="main-app">		
 		<header id="main-app-header">
-			<button v-show="currentView !== 'appList'" @click="backToList()">
+			<button v-hidden="currentView === 'appList'"  @click="backToList()">
 				Back			
 			</button>
 		</header>

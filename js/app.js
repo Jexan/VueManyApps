@@ -1,4 +1,9 @@
-const appList = {'ttt': 'Tic Tac Toe', 'todo': "To-Do"};
+const appList = {'ttt': 'Tic Tac Toe', 'todo': 'To-Do', 'calculator': "Calculator"};
+const firstApp = 'appList';
+
+Vue.directive('hidden', function(el, binding) {
+   el.style.visibility = binding.value ? 'hidden' : 'visible'; 
+});
 
 Vue.component('ttt', {
     template: '#ttt-template',
@@ -15,6 +20,10 @@ Vue.component('ttt', {
     },
 
     methods: {
+        symbolClass: function(symbol) {
+            return `${symbol}-square`;
+        },
+
         putPieceAt: function(row, col) {
             if(this.board[row][col] || this.gameFinished) {
                 // Perhaps change some text in the page
@@ -38,7 +47,7 @@ Vue.component('ttt', {
 
         someoneWon: function() {
             // Horizontal
-            for (let row in this.board) {
+            for (let row of this.board) {
                 let firstItem = row[0];
 
                 if (firstItem && 
@@ -51,7 +60,7 @@ Vue.component('ttt', {
             }
 
             // Vertical
-            for (let colN in this.rowsAndCols) {
+            for (let colN of this.rowsAndCols) {
                 let firstItem = this.board[0][colN];
              
                 if (firstItem &&
@@ -91,27 +100,11 @@ Vue.component('ttt', {
     }
 });
 
-Vue.component('appList', {
-    template: '#app-list-template',
-    
-    data: function() {
-        return {
-            appList: appList
-        }
-    },
-
-    methods: {
-        changeApp: function(app) {
-            this.$emit('update:current-view', app);
-        }
-    }
-});
-
 Vue.component('todo', {
     template: "#todo-template",
 
     data: function() { 
-        const todoId = simpleStorage.get('todoId');
+        const todoId = simpleStorage.get('Jexan@VueManyApps::todoId');
 
         if (todoId === undefined) {
             todoId = 0;
@@ -144,15 +137,15 @@ Vue.component('todo', {
         addTodo: function () {
             if (this.newTodo === '') return;
 
+            this.todoId += 1;
+            simpleStorage.set('Jexan@VueManyApps::todoId', this.todoId);
+
             const todo = {
                 text: this.newTodo,
                 done: false,
                 id: this.todoId,
                 editing: false
             }
-
-            this.todoId += 1;
-            simpleStorage.set('Jexan@VueManyApps::todoId', this.todoId);
 
             this.todos.push(todo);
             this.newTodo = '';
@@ -176,11 +169,85 @@ Vue.component('todo', {
     },
 });
 
+Vue.component('calculator', {
+    template: "#calculator-template",
+
+    data: function() {
+        return {
+            currentCalc: '',
+            currentParentheses: '(',
+            errorMsg: 'Syntax Error',
+            errorShow: false,
+            justComputed: false,
+            continueSymbols: ['*', '^', '+', '/', '-', '.'],
+        }
+    },
+
+    methods: {
+        equalTo: function() {
+            let calcRef = this.currentCalc.replace('^', '**');
+            this.justComputed = true;
+
+            try {
+                this.currentCalc = eval(calcRef);
+            } catch (e) {
+                this.currentCalc = '';
+                this.errorShow = true;
+
+                setTimeout(() => this.errorShow = false, 3000);
+            }
+        },
+
+        addSymbol: function($event) {
+            const symbolToAdd = $event.target.innerText;
+
+            if (this.justComputed && this.continueSymbols.every(s => s !== symbolToAdd)) {
+                this.currentCalc = '';
+            }
+
+            this.currentCalc += symbolToAdd;
+            this.justComputed = false; 
+        },
+
+        deleteLast: function() {
+            let calcRef = this.currentCalc;
+
+            this.currentCalc = calcRef.substr(0, calcRef.length - 1);
+        },
+
+        clearEverything: function() {
+            this.currentCalc = '';
+        },
+
+        addParentheses: function() {
+            this.currentCalc += this.currentParentheses;
+
+            this.currentParentheses = this.currentParentheses === '(' ? ')' : '(';
+        }
+    },
+});
+
+Vue.component('appList', {
+    template: '#app-list-template',
+    
+    data: function() {
+        return {
+            appList: appList
+        }
+    },
+
+    methods: {
+        changeApp: function(app) {
+            this.$emit('update:current-view', app);
+        }
+    }
+});
+
 const ManyApps = new Vue({
     el: '#main-app',
 
     data: {
-        currentView: 'appList',
+        currentView: firstApp,
     },
 
     methods: {
